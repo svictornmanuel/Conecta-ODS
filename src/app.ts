@@ -1,6 +1,23 @@
-import express,{type Request, type Response} from "express";
+import express, { type Request, type Response } from "express";
 
-const app = express();
+class App {
+  private app: express.Application;
 
-app.get("/",(req: Request, res:Response)=> res.send("Hello world"));
-export default app;
+  constructor() {
+    this.app = express();
+    this.routes();
+  }
+
+  private routes(): void {
+    this.app.get("/", (req: Request, res: Response) => res.send("Hello World"));
+    this.app.get("/hello", (req: Request, res: Response) =>
+      res.send("hello Students")
+    );
+  }
+
+  getApp() {
+    return this.app;
+  }
+}
+
+export default new App().getApp();

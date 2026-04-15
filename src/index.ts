@@ -1,9 +1,5 @@
-import app from "./app.js";
-import http from "http";
+import app from "./app";
+import { ServerBootstrap } from "./bootstrap/server.bootstrap";
 
-
-const server = http.createServer(app);
-const PORT = Number(process.env.PORT ?? 4000);
-server.listen(4000, () => {
-  console.log(`Server running at http://localhost:4000 ${PORT}`);
-});
+const serverBootstrap = new ServerBootstrap(app);
+serverBootstrap.initialize();
