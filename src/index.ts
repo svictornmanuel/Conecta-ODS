@@ -2,7 +2,7 @@ import app from "./app";
 import { ServerBootstrap } from "./bootstrap/server.bootstrap";
 
 const serverBootstrap = new ServerBootstrap(app);
-serverBootstrap.initialize();
+
 
 /**
  * Función tipo clasica
@@ -31,8 +31,8 @@ const startServerFlecha = async () => {
 /**
  * Invocación de funciones
  */
-startServer();
-startServerFlecha();
+//startServer();
+//startServerFlecha();
 
 /**
  * Función tipo autoinvocada
