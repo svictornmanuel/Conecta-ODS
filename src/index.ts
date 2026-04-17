@@ -1,48 +1,18 @@
 import app from "./app";
-import { ServerBootstrap } from "./bootstrap/server.bootstrap";
+import { ServerBootstrap } from "./infraestructure/bootstrap/server.bootstrap";
+import { conectDB } from "./infraestructure/config/data-base"
 
 const serverBootstrap = new ServerBootstrap(app);
 
-
-/**
- * Función tipo clasica
- */
-async function startServer() {
-  try {
-    const instance = [serverBootstrap.initialize];
-    await Promise.all(instance);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-/**
- * Función tipo flecha
- */
-
-const startServerFlecha = async () => {
-  try {
-    const instance = [serverBootstrap.initialize];
-    await Promise.all(instance);
-  } catch (error) {
-    console.log(error);
-  }
-};
-/**
- * Invocación de funciones
- */
-//startServer();
-//startServerFlecha();
-
-/**
- * Función tipo autoinvocada
- */
-
 (async () => {
   try {
-    const instance = [serverBootstrap.initialize];
+    const instance = [
+      conectDB(),
+      serverBootstrap.initialize
+    ];
     await Promise.all(instance);
   } catch (error) {
-    console.log(error);
+    console.log("Error al iniciar la aplicación: ", error),
+    process.exit(1)
   }
 })();
