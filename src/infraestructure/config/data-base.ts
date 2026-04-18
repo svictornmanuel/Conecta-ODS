@@ -7,11 +7,12 @@ import { error } from 'console';
 
 dotenv.config();
     export const AppDataSource = new DataSource ({
-        type: 'mysql',
+        type: 'postgres',
         port: Number(envs.DB_PORT),
         username: envs.DB_USER,
         password: envs.DB_PASSWORD,
         database: envs.DB_NAME,
+        schema:"users",
         synchronize: true,
         logging: true,
         entities: [User],
@@ -20,7 +21,7 @@ dotenv.config();
 export const conectDB = async() => {
     try {
         await AppDataSource.initialize();
-        console.log("Conectado a la base de datos MySQL");
+        console.log("Conectado a la base de datos PostgresSQL");
 
     } catch (error) {
         console.error("Error al conectar con la base de datos: ", error);
