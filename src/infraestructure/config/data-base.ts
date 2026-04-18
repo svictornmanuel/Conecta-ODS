@@ -1,30 +1,28 @@
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
-import { User } from "../entities/User"
-import envs from "./environment-vars";
-import { env } from "process";
-import { error } from 'console';
+import { User } from "../entities/User";
+import envs from "../config/environment-vars";
 
 dotenv.config();
-    export const AppDataSource = new DataSource ({
-        type: 'postgres',
-        port: Number(envs.DB_PORT),
-        username: envs.DB_USER,
-        password: envs.DB_PASSWORD,
-        database: envs.DB_NAME,
-        schema:"users",
-        synchronize: true,
-        logging: true,
-        entities: [User],
-    });
+export const AppDataSource = new DataSource({
+  type: "postgres",
+  port: Number(envs.DB_PORT),
+  username: envs.DB_USER,
+  password: envs.DB_PASSWORD,
+  database: envs.DB_NAME,
+  schema: "users",
+  synchronize: true,
+  logging: true,
+  entities: [User],
+});
 
-export const conectDB = async() => {
-    try {
-        await AppDataSource.initialize();
-        console.log("Conectado a la base de datos PostgresSQL");
-
-    } catch (error) {
-        console.error("Error al conectar con la base de datos: ", error);
-        process.exit(1);
-    }
-}
+//Conectar a la BD
+export const connectDB = async () => {
+  try {
+    await AppDataSource.initialize();
+    console.log("Conectado a la base de datos PostgreSQL");
+  } catch (error) {
+    console.error("Error al conectar a la base de datos: ", error);
+    process.exit(1);
+  }
+};

@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { User as UserDomain } from "../../domain/User";
 import { User as UserEntity } from "../entities/User";
-import { UserPort } from "../../domain/UserPorts";
+import { UserPort } from "../../domain/UserPort";
 import { AppDataSource } from "../config/data-base";
 import { PassThrough } from "stream";
 
@@ -15,19 +15,19 @@ export class UserAdapter implements UserPort {
   private toDomain(user: UserEntity): UserDomain {
     return {
       id: user.id_user,
-      name: user.user_name,
-      email: user.user_email,
-      password: user.user_password,
-      status: user.user_status,
+      name: user.name_user,
+      email: user.email_user,
+      password: user.password_user,
+      status: user.status_user,
     };
   }
   //Transforma el modelo de dominio a la entidad de infraestructura
   private toEntity(user: Omit<UserDomain, "id">): UserEntity {
     const userEntity = new UserEntity();
-    userEntity.user_name = user.name;
-    userEntity.user_email = user.email;
-    userEntity.user_password = user.password;
-    userEntity.user_status = user.status;
+    userEntity.name_user = user.name;
+    userEntity.email_user = user.email;
+    userEntity.password_user = user.password;
+    userEntity.status_user = user.status;
     return userEntity;
   }
 
@@ -50,10 +50,10 @@ export class UserAdapter implements UserPort {
 
       // Actualizar solo los campos enviados
       Object.assign(existingUser, {
-        name_user: user.name ?? existingUser.user_name,
-        email_user: user.email ?? existingUser.user_email,
-        password_user: user.password ?? existingUser.user_password,
-        status_user: user.status ?? existingUser.user_status,
+        name_user: user.name ?? existingUser.name_user,
+        email_user: user.email ?? existingUser.email_user,
+        password_user: user.password ?? existingUser.password_user,
+        status_user: user.status ?? existingUser.status_user,
       });
 
       await this.userRepository.save(existingUser);
@@ -94,22 +94,22 @@ export class UserAdapter implements UserPort {
   }
   async getUserByEmail(email: string): Promise<UserDomain | null> {
     const user = await this.userRepository.findOne({
-      where: { user_email: email },
+      where: { email_user: email },
     });
     if (!user) return null;
 
     return {
       id: user.id_user,
-      name: user.user_name,
-      email: user.user_email,
-      password: user.user_password,
-      status: user.user_status,
+      name: user.name_user,
+      email: user.email_user,
+      password: user.password_user,
+      status: user.status_user,
     };
   }
   async getAllUsers(): Promise<UserDomain[]> {
     try {
       const users = await this.userRepository.find({
-        where: { user_status: 1 },
+        where: { status_user: 1 },
       });
       return users.map(this.toDomain);
     } catch (error) {

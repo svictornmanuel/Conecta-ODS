@@ -1,6 +1,6 @@
 import express from "express";
 import http from "http";
-import Envs from "../config/environment-vars";
+import envs from "../config/environment-vars";
 
 export class ServerBootstrap {
   private app: express.Application;
@@ -12,7 +12,7 @@ export class ServerBootstrap {
   initialize(): Promise<boolean> {
     return new Promise((resolve, reject) => {
       const server = http.createServer(this.app);
-      const PORT = Number(Envs.PORT ?? 4000);
+      const PORT = Number(envs.PORT ?? 4000);
       server
         .listen(PORT)
         .on("listening", () => {

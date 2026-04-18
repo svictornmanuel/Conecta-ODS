@@ -1,5 +1,5 @@
 import express, { type Request, type Response } from "express";
-import userRoutes from "../routes/user-routes";
+import userRoutes from "../routes/UserRoutes";
 
 class App {
   private app: express.Application;

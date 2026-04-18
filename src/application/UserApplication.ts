@@ -1,10 +1,30 @@
+import bcrypt from "bcryptjs";
 import { User } from "../domain/User";
-import { UserPort } from "../domain/UserPorts";
+import { UserPort } from "../domain/UserPort";
+import { AuthApplication } from "./AuthApplication";
 export class UserApplication {
   private port: UserPort;
 
   constructor(port: UserPort) {
     this.port = port;
+  }
+
+  async login(email: string, password: string): Promise<string> {
+    const existUser = await this.port.getUserByEmail(email);
+    if (!existUser) {
+      throw new Error("Credenciales inválidas");
+    }
+
+    const passMatch = await bcrypt.compare(password, existUser.password);
+    if (!passMatch) {
+      throw new Error("Credenciales inválidas");
+    }
+
+    const token = AuthApplication.generateToken({
+      id: existUser.id,
+      email: existUser.email,
+    });
+    return token;
   }
 
   async createUser(user: Omit<User, "id">): Promise<number> {
@@ -13,6 +33,9 @@ export class UserApplication {
     if (existUser) {
       throw new Error("Este email ya esta registrado");
     }
+    // Hashear la contraseña antes de guardarla
+    const hashedPassword = await bcrypt.hash(user.password, 12);
+    user.password = hashedPassword;
     return this.port.createUser(user);
   }
   async getUserById(id: number): Promise<User | null> {
